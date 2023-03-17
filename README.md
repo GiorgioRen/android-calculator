@@ -9,4 +9,4 @@ Features:
 - chain operations, e.g. 1 + 2 + 3
 - simple landscape layout
 
-![gif](calc.gif)
+<img src="calc.gif" width="200">
