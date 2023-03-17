@@ -79,7 +79,14 @@ public class Calculator {
                 display.setDisplay(firstNumber);
             } else if (state == CalcState.SECOND_NUMBER){
                 if (secondNumber.contains(".")) return;
+                display.setDisplay(secondNumber);
                 secondNumber += ".";
+                display.setDisplay(secondNumber);
+            } else if (state == CalcState.OPERAND) {
+                // user clicked on '.' after an operand.
+                // switching to secondNumber and setting it to "0."
+                secondNumber = "0.";
+                state = CalcState.SECOND_NUMBER;
                 display.setDisplay(secondNumber);
             }
         } else if (button == Button.EQUALS){
@@ -91,6 +98,14 @@ public class Calculator {
             state = CalcState.DONE;
             display.setDisplayFormatted(firstNumber);
         } else {
+            if (state == CalcState.SECOND_NUMBER){
+                // user clicked on operand after inserting the second number
+                // bypassing effectively the equals button
+                // should compute the operand and show the result
+                firstNumber = operand.compute(firstNumber, secondNumber);
+                display.setDisplayFormatted(firstNumber);
+                // caveat: formatted here is important since we are doing an "equals" operation
+            }
             state = CalcState.OPERAND;
             if (button == Button.PLUS){
                 operand = new Plus();
