@@ -24,6 +24,7 @@ public class Calculator {
     private CalcState state;
     private enum CalcState{
         FIRST_NUMBER,
+        OPERAND,
         SECOND_NUMBER,
         DONE
     }
@@ -50,10 +51,16 @@ public class Calculator {
             if (Objects.equals(firstNumber, "0")) firstNumber = "";
             firstNumber += Integer.toString(digit);
             secondNumber = "0";
+            // state unchanged, still awaiting rest of firstNumber
             display.setDisplay(firstNumber);
+        } else if (state == CalcState.OPERAND){
+            state = CalcState.SECOND_NUMBER;
+            secondNumber = Integer.toString(digit);
+            display.setDisplay(secondNumber);
         } else if (state == CalcState.SECOND_NUMBER) {
             if (Objects.equals(secondNumber, "0")) secondNumber = "";
             secondNumber += Integer.toString(digit);
+            // state unchanged, still awaiting rest of secondNumber
             display.setDisplay(secondNumber);
         }
 
@@ -63,6 +70,7 @@ public class Calculator {
             firstNumber = "0";
             secondNumber = "0";
             state = CalcState.FIRST_NUMBER;
+            operand = new None();
             display.setDisplay("0");
         } else if (button == Button.DOT) {
             if (state == CalcState.FIRST_NUMBER){
@@ -75,16 +83,15 @@ public class Calculator {
                 display.setDisplay(secondNumber);
             }
         } else if (button == Button.EQUALS){
-            Log.i("Equals", "State:"+state);
-            if (state == CalcState.FIRST_NUMBER){
+            Log.i("Equals", "current state "+state);
+            if (state == CalcState.FIRST_NUMBER || state == CalcState.OPERAND){
                 secondNumber = firstNumber;
             }
             firstNumber = operand.compute(firstNumber, secondNumber);
-            secondNumber = "0";
             state = CalcState.DONE;
             display.setDisplayFormatted(firstNumber);
         } else {
-            state = CalcState.SECOND_NUMBER;
+            state = CalcState.OPERAND;
             if (button == Button.PLUS){
                 operand = new Plus();
             } else if (button == Button.MINUS) {
