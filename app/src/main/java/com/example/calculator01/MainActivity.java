@@ -1,15 +1,15 @@
 package com.example.calculator01;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import java.util.Objects;
+import java.io.Console;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,19 +21,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         calculator = new Calculator(findViewById(R.id.totalDisplay));
     }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if(newConfig.orientation==Configuration.ORIENTATION_PORTRAIT){
-        }else{
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-    }
 
-    public void printNo( View v ) {
+    public void pressButton(View v ) {
+        Log.i("pressButton", v.getResources().getResourceName(v.getId()));
         switch (v.getId()) {
-
             // Check digit buttons
             case (R.id.button0):
                 calculator.pressNumber(0);
